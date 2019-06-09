@@ -84,7 +84,7 @@ static struct frandom_state *erandom_state;
 static inline void swap_byte(u8 *a, u8 *b)
 {
 	u8 swapByte; 
-
+  
 	swapByte = *a; 
 	*a = *b;      
 	*b = swapByte;
@@ -100,7 +100,7 @@ void erandom_get_random_bytes(char *buf, size_t count)
 	unsigned int i;
 	unsigned int j;
 	u8 *S;
-
+  
 	/* If we fail to get the semaphore, we revert to external random data.
 	   Since semaphore blocking is expected to be very rare, and interrupts
 	   during these rare and very short periods of time even less frequent,
@@ -118,7 +118,7 @@ void erandom_get_random_bytes(char *buf, size_t count)
 	   RNG is already restored in the boot sequence (not critical, but
 	   better.
 	*/
-
+	
 	if (!erandom_seeded) {
 		erandom_seeded = 1;
 		init_rand_state(state, EXTERNAL_SEED);
@@ -135,7 +135,7 @@ void erandom_get_random_bytes(char *buf, size_t count)
 		swap_byte(&S[i], &S[j]);
 		*buf++ = S[(S[i] + S[j]) & 0xff];
 	}
-
+ 
 	state->i = i;     
 	state->j = j;
 
@@ -245,7 +245,7 @@ static ssize_t frandom_read(struct file *filp, char *buf, size_t count,
 
 	ret = count; /* It's either everything or an error... */
 
-	i = state->i;     
+	i = state->i;
 	j = state->j;
 	S = state->S;  
 
@@ -274,7 +274,7 @@ static ssize_t frandom_read(struct file *filp, char *buf, size_t count,
 	}
 
  out:
-	state->i = i;     
+	state->i = i;
 	state->j = j;
 
 	up(&state->sem);
@@ -308,7 +308,7 @@ static int frandom_init_module(void)
 
 	/* The buffer size MUST be at least 256 bytes, because we assume that
 	   minimal length in init_rand_state().
-	*/       
+	*/
 	if (frandom_bufsize < 256) {
 		printk(KERN_ERR "frandom: Refused to load because frandom_bufsize=%d < 256\n",frandom_bufsize);
 		return -EINVAL;
